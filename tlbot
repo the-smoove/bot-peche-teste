@@ -8,7 +8,7 @@ import cv2
 class FishingBot:
     def __init__(self):
         self.sct = mss.mss()
-        self.active_key = '.'  # Commence par la touche 'D'
+        self.active_key = 'd'  # Commence par la touche 'D'
         self.hold_time_base = 0.1  # Temps de pression par défaut (réduit pour plus de rapidité)
         self.switch_time = 0.4  # Intervalle de temps entre chaque changement de direction (en secondes)
         self.ai_threshold = 0.5 # Seuil pour déterminer si le bot va changer de direction (logique de l'IA)
