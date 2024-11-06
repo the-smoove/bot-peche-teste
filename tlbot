@@ -1,0 +1,58 @@
+import pyautogui
+import time
+import random
+import mss
+import numpy as np
+import cv2
+
+class FishingBot:
+    def __init__(self):
+        self.sct = mss.mss()
+        self.active_key = '.'  # Commence par la touche 'D'
+        self.hold_time_base = 0.1  # Temps de pression par défaut (réduit pour plus de rapidité)
+        self.switch_time = 0.4  # Intervalle de temps entre chaque changement de direction (en secondes)
+        self.ai_threshold = 0.5 # Seuil pour déterminer si le bot va changer de direction (logique de l'IA)
+    
+    def ai_decision(self):
+        """Fonction IA pour déterminer la direction à prendre."""
+        # Simuler un calcul IA simple basé sur un tirage aléatoire (remplacer par une logique complexe si nécessaire)
+        # Par exemple : si un critère est rempli, on peut décider de pousser la touche dans une direction
+        return 'a' if random.random() > self.ai_threshold else 'd'
+
+    def press_key(self, key, hold_time=None):
+        """Appuyez sur la touche spécifiée avec une durée de maintien."""
+        if hold_time is None:
+            hold_time = self.hold_time_base  # Utilise la durée de base si non spécifié
+
+        pyautogui.keyDown(key)
+        time.sleep(hold_time)  # Maintenir la touche pendant un peu plus longtemps
+        pyautogui.keyUp(key)
+        print(f"Touche {key} pressée pendant {hold_time:.2f} secondes.")
+
+    def switch_direction(self):
+        """Utiliser l'IA pour déterminer la direction à prendre."""
+        self.active_key = self.ai_decision()
+        print(f"Direction déterminée par l'IA : {self.active_key}")
+
+    def main(self):
+        last_switch_time = time.time()  # Temps du dernier changement de direction
+
+        while True:
+            # Si le temps écoulé depuis le dernier changement de direction est supérieur à l'intervalle
+            if time.time() - last_switch_time > self.switch_time:
+                # Appuyer sur la touche active
+                self.press_key(self.active_key, hold_time=1.0)  # Augmenter légèrement le temps d'appui à 1 seconde
+
+                # Changer de direction (décision basée sur l'IA)
+                self.switch_direction()
+
+                # Réinitialiser le temps du dernier changement
+                last_switch_time = time.time()
+
+            # Pause pour éviter la surcharge du CPU et donner du temps pour les actions
+            time.sleep(0.05)
+
+# Lancer le bot
+if __name__ == '__main__':
+    bot = FishingBot()
+    bot.main()
